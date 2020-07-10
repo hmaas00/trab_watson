@@ -1,10 +1,30 @@
 from flask import Flask, escape
+from dictation import start_stream
+from reading import start_reading
+import time
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-	return "Bem vindo"
+	return '''<h1 style="text-align: center;">Brincando de telefone sem fio com o IBM Watson</h1>
+		<form action="/action_page.php">
+		<p style="text-align: center;"><label for="size">Escolha o n&uacute;mero de rodadas:</label></p>
+		<select id="size" name="size">
+		<option selected="selected" value="2">2</option>
+		<option value="4">4</option>
+		<option value="6">6</option>
+		<option value="8">8</option>
+		<option value="10">10</option>
+		</select>
+		<p style="text-align: center;"><label for="size">Escolha a dura&ccedil;&atilde;o do &aacute;udio:</label></p>
+		<select id="size" name="size">
+		<option value="curto">curto</option>
+		<option value="medio">m&eacute;dio</option>
+		<option value="longo">longo</option>
+		</select>
+		<p style="text-align: center;"><input type="submit" /></p>
+		</form>'''
 
 @app.route('/<name>')
 def hello(name):
