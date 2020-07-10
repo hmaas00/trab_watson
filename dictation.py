@@ -63,7 +63,7 @@ class MyRecognizeCallback(RecognizeCallback):
     def on_data(self, data):
         print('Texto detectado: ')
         for result in data['results']:
-            print(result['alternatives'][0]['transcript'])
+            print(result['alternatives'][0]['transcript']) #Como gravar essa saída para uso na função start_reading em tsf.py?
         print('')
 
     def on_close(self):
@@ -121,7 +121,7 @@ def start_stream(tempo):
         recognize_thread.start()
 
         # para gravacao
-        time.sleep(tempo)
+        time.sleep(tempo) #essa linha foi acrescentada para tentar temporizar o áudio segundo a escolha inicial do usuário
         audio_source.completed_recording()
         stream.stop_stream()
         stream.close()
