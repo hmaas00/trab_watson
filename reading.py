@@ -78,18 +78,14 @@ class MySynthesizeCallback(SynthesizeCallback):
 
 
 
-def start_reading():
+def start_reading(texto):
     watson_callback = MySynthesizeCallback()
 
-    print('Digite a frase a ser lida em voz, digite q para sair')
+    print('Ouça a frase e repita-a para o IBM Watson na próxima iteração: ')
 
-    text = ''
-    while text != 'q':
-        text = input('>> ')
-        if text != 'q':
-            service.synthesize_using_websocket(text,
-                                           watson_callback,
-                                           accept='audio/wav',
-                                           voice="pt-BR_IsabelaVoice"
-                                        )
+    service.synthesize_using_websocket(texto,
+                                    watson_callback,
+                                    accept='audio/wav',
+                                    voice="pt-BR_IsabelaVoice"
+                                )
 

@@ -36,9 +36,11 @@ speech_to_text = SpeechToTextV1(
    authenticator=authenticator)
 speech_to_text.set_service_url(config['SPEECH2TEXT']['URL'])
 
+resultado = ''
 
 # classe de callback para o servico de reconhecimento de voz
 class MyRecognizeCallback(RecognizeCallback):
+    
     def __init__(self):
         RecognizeCallback.__init__(self)
 
@@ -61,10 +63,11 @@ class MyRecognizeCallback(RecognizeCallback):
         pass
 
     def on_data(self, data):
+        global resultado
         print('Texto detectado: ')
         for result in data['results']:
-            print(result['alternatives'][0]['transcript']) #Como gravar essa saída para uso na função start_reading em tsf.py?
-        print('')
+            resultado = (result['alternatives'][0]['transcript']) #Como gravar essa saída para uso na função start_reading em tsf.py?
+        
 
     def on_close(self):
         print("Conexão fechada")
@@ -95,7 +98,8 @@ def pyaudio_callback(in_data, frame_count, time_info, status):
         pass # discard
     return (None, pyaudio.paContinue)
 
-def start_stream(tempo):
+def start_stream():
+    global resultado
     # instancia pyaudio
     audio = pyaudio.PyAudio()
 
@@ -120,13 +124,17 @@ def start_stream(tempo):
         recognize_thread = Thread(target=recognize_using_websocket, args=())
         recognize_thread.start()
 
+        command = ''
+        while command != 'q':
+            command = input()
+
         # para gravacao
-        time.sleep(tempo) #essa linha foi acrescentada para tentar temporizar o áudio segundo a escolha inicial do usuário
         audio_source.completed_recording()
         stream.stop_stream()
         stream.close()
         audio.terminate()
         recognize_thread.join()
+        return resultado
 
     except KeyboardInterrupt:
         # para gravacao
