@@ -88,4 +88,3 @@ def start_reading(texto):
                                     accept='audio/wav',
                                     voice="pt-BR_IsabelaVoice"
                                 )
-
