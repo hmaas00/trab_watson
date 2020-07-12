@@ -17,13 +17,7 @@ def index():
 		<option value="8">8</option>
 		<option value="10">10</option>
 		</select>
-		<p style="text-align: center;"><label for="size">Escolha a dura&ccedil;&atilde;o do &aacute;udio:</label></p>
-		<select id="size" name="size">
-		<option value="curto">curto</option>
-		<option value="medio">m&eacute;dio</option>
-		<option value="longo">longo</option>
-		</select>
-		<p style="text-align: center;"><input type="submit" /></p>
+		<p style="text-align: center;"><input type="submit" value="GRAVAR!" /></p>
 		</form>'''
 
 @app.route('/<name>')

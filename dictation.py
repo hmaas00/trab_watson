@@ -3,7 +3,7 @@ import pyaudio
 from ibm_watson import SpeechToTextV1
 from ibm_watson.websocket import RecognizeCallback, AudioSource
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from threading import Thread, Timer
+from threading import Thread
 import configparser
 import time
 
@@ -45,6 +45,9 @@ class MyRecognizeCallback(RecognizeCallback):
         RecognizeCallback.__init__(self)
 
     def on_transcription(self, transcript):
+        global resultado
+        print('transcript: ', transcript[0]['transcript'])
+        resultado = transcript[0]['transcript']
         pass
 
     def on_connected(self):
@@ -63,10 +66,10 @@ class MyRecognizeCallback(RecognizeCallback):
         pass
 
     def on_data(self, data):
-        global resultado
+        #global resultado
         print('Texto detectado: ')
-        for result in data['results']:
-            resultado = (result['alternatives'][0]['transcript']) #Como gravar essa saída para uso na função start_reading em tsf.py?
+        #for result in data['results']:
+        #    resultado = (result['alternatives'][0]['transcript']) #Como gravar essa saída para uso na função start_reading em tsf.py?
         
 
     def on_close(self):
@@ -99,7 +102,6 @@ def pyaudio_callback(in_data, frame_count, time_info, status):
     return (None, pyaudio.paContinue)
 
 def start_stream():
-    global resultado
     # instancia pyaudio
     audio = pyaudio.PyAudio()
 
@@ -121,6 +123,8 @@ def start_stream():
     stream.start_stream()
 
     try:
+        if audio_source.is_recording == False:
+            audio_source.is_recording = True
         recognize_thread = Thread(target=recognize_using_websocket, args=())
         recognize_thread.start()
 
