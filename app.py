@@ -1,4 +1,4 @@
-from flask import Flask, escape, render_template
+from flask import Flask, escape, render_template, request
 from dictation import start_stream
 from reading import start_reading
 import time
@@ -10,9 +10,11 @@ def index():
 	return render_template('index.html')
 
 @app.route('/resposta')
-def resposta(blob):
-    print(f"em resposta {type(blob)}")
-    return 'hello !'
+def resposta():
+    iteracoes = request.args['iteracoes']
+    print(f"em resposta {type(iteracoes)}")
+    iter = int(iteracoes)
+    return render_template('resposta.html', iter=iter)
 
 @app.route('/<name>')
 def hello(name):
