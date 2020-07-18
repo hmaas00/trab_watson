@@ -9,12 +9,28 @@ app = Flask(__name__)
 def index():
 	return render_template('index.html')
 
-@app.route('/resposta')
+@app.route('/apresentar')
 def resposta():
     iteracoes = request.args['iteracoes']
     print(f"em resposta {type(iteracoes)}")
     iter = int(iteracoes)
-    return render_template('resposta.html', iter=iter)
+    return render_template('apresentacao.html', iter=iter)
+
+@app.route('/ouvir')
+def ouvir():
+
+    print('chegou em ouvir')
+    return render_template('ouvir.html')
+
+
+@app.route('/interpretar', methods= ['GET','POST'])
+def interpretar():
+
+    data = request.data
+    print(type(data))
+    print('chegou em interpretar')
+    return 'interpretado!!!!'
+
 
 @app.route('/<name>')
 def hello(name):
