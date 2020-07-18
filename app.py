@@ -2,15 +2,14 @@ from flask import Flask, escape, render_template, request
 
 import requests
 from requests.auth import HTTPBasicAuth
-from dictation import start_stream
-from reading import start_reading
 import time
 
 import configparser
-import pyaudio
 from ibm_watson import SpeechToTextV1
 from ibm_watson.websocket import RecognizeCallback, AudioSource
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+
+import json
 
 #carrega configuracoes
 config = configparser.ConfigParser()
@@ -73,12 +72,39 @@ def interpretar():
         data = data, 
         headers = {"Content-Type": "audio/ogg; codecs=opus"})
 
-    print(x.text)
+    print('texto:')
+    json_resposta = x.text
+    print(json_resposta)
+    print('interpretacao')
+
+    interpretacao = json.loads(json_resposta, encoding='utf-8')['results'][0 ]['alternatives'][0]['transcript']
+    print(interpretacao)
+
+    '''curl -X POST -u "apikey:{apikey}" 
+    --header "Content-Type: application/json" 
+    --header "Accept: audio/wav" 
+    --data "{\"text\":\"Hello world\"}" 
+    --output hello_world.wav "{url}/v1/synthesize?voice=en-US_AllisonV3Voice"'''
+
+
+    #auth_var = HTTPBasicAuth('WATSON_STT_APIKEY', config['SPEECH2TEXT']['API_KEY'])
+    auth_var = HTTPBasicAuth('apikey', config['TEXT2SPEECH']['API_KEY'])
+
+    #?model=en-US_NarrowbandModel pt-BR_NarrowbandModel
+
+    fala = requests.post( 
+        (config['TEXT2SPEECH']['URL'] + '/v1/synthesize?voice=pt-BR_IsabelaVoice'), 
+        auth=auth_var,
+        data = interpretacao, 
+        headers = {"Content-Type": "application/json", "Accept":"audio/ogg; codecs=opus"})
+        #headers = {"Content-Type": "audio/ogg; codecs=opus"})
+    print("resposta do text2speech - tipo: ")
+    print(type(fala.content))
 
 
 
 
-    print('chegou em interpretar')
+    
     return 'interpretado!!!!'
 
 
