@@ -92,20 +92,32 @@ def interpretar():
 
     #?model=en-US_NarrowbandModel pt-BR_NarrowbandModel
 
+    print("como ficou:")
+    print("{\"text\":\"" + interpretacao + "\"}")
+
     fala = requests.post( 
-        (config['TEXT2SPEECH']['URL'] + '/v1/synthesize?voice=pt-BR_IsabelaVoice'), 
+        (config['TEXT2SPEECH']['URL'] + '/v1/synthesize?voice=pt-BR_IsabelaV3Voice'), #pt-BR_IsabelaV3Voice
         auth=auth_var,
-        data = interpretacao, 
+        data = "{\"text\":\"" + interpretacao + "\"}",
+        #data = "\{\"text\":\"" + interpretacao + "\"}",
+        #data = interpretacao, 
+        #headers = {"Content-Type": "application/json", "Accept":"audio/wav"})
         headers = {"Content-Type": "application/json", "Accept":"audio/ogg; codecs=opus"})
+        #headers = {"Content-Type": "text/plain", "Accept":"audio/ogg; codecs=opus"})
         #headers = {"Content-Type": "audio/ogg; codecs=opus"})
     print("resposta do text2speech - tipo: ")
-    print(type(fala.content))
+    print(type(fala))
+    #print(type(fala.content))
+    print(type(fala.encoding))
+    #print(fala.text)
+    print(fala.headers)
+    print(fala.status_code)
+
+    with open("exemplo_fala.ogg", "wb") as f:
+        f.write(fala.content)
 
 
-
-
-    
-    return 'interpretado!!!!'
+    return render_template("mostrar_audio.html", myBlob = fala.content)
 
 
 @app.route('/<name>')
