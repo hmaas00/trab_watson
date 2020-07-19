@@ -4,18 +4,58 @@
   <title>Telefone Sem Fio</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
 
-<div class="jumbotron text-center">
-  <h1>Brincando de telefone sem fio com o IBM Watson</h1>
-</div>
+    <h1 class="text-success text-center m-5">Brincando de telefone sem fio com o IBM Watson</h1>
 
-    <input type="button" id="record" value="record">
-    <input type="button" id="stop" value="stop">
+    <div>
+        <p class="m-5 text-center">Telefone sem fio (também chamado "telefone estragado" em Portugal) é uma tradicional 
+            brincadeira popular, na qual uma pessoa fala uma palavra ou frase (o "segredo") 
+            ao ouvido de outra pessoa ao seu lado, de modo que os demais participantes não 
+            escutem ou descubram imediatamente qual é o "segredo". 
+            Quem ouviu o segredo tenta então repeti-lo para o próximo participante, e 
+            assim por diante até chegar ao último, que deve contar o segredo em voz alta. 
+            Uma das regras do jogo é que o segredo não pode ser repetido ao ouvinte da vez. 
+            Por esse motivo é comum o segredo ser mal entendido e por isso passado ao demais 
+            ouvintes de forma cada vez mais deturpada, chegando totalmente diferente ao ouvinte final, 
+            e isso é o que torna a brincadeira divertida. É possível competir dois grupos para ver qual 
+            grupo chega com a palavra mais fielmente ao destino.
+        </p>
+        <p class="m-5 text-center">Costuma-se também fazer referência a essa brincadeira em qualquer situação que 
+            possa haver falhas de comunicação num ambiente que 
+            depende de um passar a informação para o outro sucessivamente até 
+            chegar num destino. Pode-se fazer crítica a alguma 
+            hierarquia numa empresa, por exemplo, dizendo que a 
+            ordem do chefe passou como um "telefone sem fio" até chegar ao 
+            último empregado que a executou de forma totalmente diferente.
+        </p>
+        <p class="m-5 text-center"> Fonte:
+            <a class="text-center" href="https://pt.wikipedia.org/wiki/Telefone_sem_fio_(brincadeira)">
+                https://pt.wikipedia.org/wiki/Telefone_sem_fio_(brincadeira)</a>
+        </p>
+        
+        <p class="m-5 text-center">Nossa finalidade aqui é apenas mostrar as capacidades do Watson!</p>
+            
+    </div>
+    <div class="m-5 text-center">
+        <input type="button" class="btn btn-success" id="record" value="gravar">
+        <input type="button" class="btn btn-danger" id="stop" value="parar"> 
+    </div>
+
+    <div class="text-center">
+        <audio controls id="audio">
+
+            <!--<link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+            <!--<source src="audio_files/fala_watson.ogg" type="audio/ogg">-->
+-->
+            <source src= {{ url_for('static', filename='fala_watson.ogg') }} type="audio/ogg">
+        </audio>
+    </div>
+    
 
     <script>
     if (navigator.mediaDevices) {
@@ -52,36 +92,13 @@
         {
             console.log("data available after MediaRecorder.stop() called.");
 
-            var clipName = prompt('Enter a name for your sound clip');
-
-            var clipContainer = document.createElement('article');
-            var clipLabel = document.createElement('p');
-            var audio = document.createElement('audio');
-            var deleteButton = document.createElement('button');
             
-            clipContainer.classList.add('clip');
-            audio.setAttribute('controls', '');
-            deleteButton.innerHTML = "Delete";
-            clipLabel.innerHTML = clipName;
-
-            clipContainer.appendChild(audio);
-            clipContainer.appendChild(clipLabel);
-            clipContainer.appendChild(deleteButton);
-
-            var soundClips = document.createElement('div');
-            soundClips.appendChild(clipContainer);
-            var body = document.getElementsByTagName('body')[0]
-            body.appendChild(soundClips);
-
+            
             audio.controls = true;
             var blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
             chunks = [];
             var audioURL = URL.createObjectURL(blob);
             // aqui deve vir o codigo para enviar o blob para o servidor
-
-
-
-
 
             fetch("./interpretar", {
                 method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -95,32 +112,23 @@
                 redirect: 'follow', // manual, *follow, error
                 referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
                 body: blob
-            }).then(resp => console.log(resp))
+            }).then(resp => {
+
+                //console.log(resp);
+                //console.log(resp.body);
+               
+                return resp.blob();
+            })
+
+            .then(function(blob) {
+                    const objectURL = URL.createObjectURL(blob);
+                    let audio = document.getElementById("audio");
+                    audio.src = objectURL;
+                    audio.play();
+            })
             .catch(resp => console.log("catch pegou esse erro: " +resp));
 
-            
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            audio.src = audioURL;
-            console.log("recorder stopped");
-
-            deleteButton.onclick = function(e) {
-                evtTgt = e.target;
-                evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
-            }
         }
 
         mediaRecorder.ondataavailable = function(e) {

@@ -1,4 +1,4 @@
-from flask import Flask, escape, render_template, request
+from flask import Flask, escape, render_template, request, url_for
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -30,7 +30,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-	return render_template('index.html')
+	return render_template('ouvir.html')
 
 @app.route('/apresentar')
 def resposta():
@@ -113,11 +113,10 @@ def interpretar():
     print(fala.headers)
     print(fala.status_code)
 
-    with open("exemplo_fala.ogg", "wb") as f:
+    with open("static/fala_watson.ogg", "wb") as f:
         f.write(fala.content)
 
-
-    return render_template("mostrar_audio.html", myBlob = fala.content)
+    return fala.content
 
 
 @app.route('/<name>')
