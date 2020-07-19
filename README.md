@@ -8,7 +8,9 @@ Todo mundo já brincou de **telefone sem fio** pelo menos uma vez na vida. Agora
 
 Clone o repositório, abra um console python, vá até a pasta da aplicação e dê o comando:
 
-> `python tsf.py`
+> 
+>
+> `python app.py`
 
 # Instruções
 

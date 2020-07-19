@@ -10,50 +10,59 @@
 </head>
 <body>
 
-    <h1 class="text-success text-center m-5">Brincando de telefone sem fio com o IBM Watson</h1>
-
-    <div>
-        <p class="m-5 text-center">Telefone sem fio (também chamado "telefone estragado" em Portugal) é uma tradicional 
-            brincadeira popular, na qual uma pessoa fala uma palavra ou frase (o "segredo") 
-            ao ouvido de outra pessoa ao seu lado, de modo que os demais participantes não 
-            escutem ou descubram imediatamente qual é o "segredo". 
-            Quem ouviu o segredo tenta então repeti-lo para o próximo participante, e 
-            assim por diante até chegar ao último, que deve contar o segredo em voz alta. 
-            Uma das regras do jogo é que o segredo não pode ser repetido ao ouvinte da vez. 
-            Por esse motivo é comum o segredo ser mal entendido e por isso passado ao demais 
-            ouvintes de forma cada vez mais deturpada, chegando totalmente diferente ao ouvinte final, 
-            e isso é o que torna a brincadeira divertida. É possível competir dois grupos para ver qual 
-            grupo chega com a palavra mais fielmente ao destino.
-        </p>
-        <p class="m-5 text-center">Costuma-se também fazer referência a essa brincadeira em qualquer situação que 
-            possa haver falhas de comunicação num ambiente que 
-            depende de um passar a informação para o outro sucessivamente até 
-            chegar num destino. Pode-se fazer crítica a alguma 
-            hierarquia numa empresa, por exemplo, dizendo que a 
-            ordem do chefe passou como um "telefone sem fio" até chegar ao 
-            último empregado que a executou de forma totalmente diferente.
-        </p>
-        <p class="m-5 text-center"> Fonte:
-            <a class="text-center" href="https://pt.wikipedia.org/wiki/Telefone_sem_fio_(brincadeira)">
-                https://pt.wikipedia.org/wiki/Telefone_sem_fio_(brincadeira)</a>
-        </p>
-        
-        <p class="m-5 text-center">Nossa finalidade aqui é apenas mostrar as capacidades do Watson!</p>
-            
-    </div>
-    <div class="m-5 text-center">
-        <input type="button" class="btn btn-success" id="record" value="gravar">
-        <input type="button" class="btn btn-danger" id="stop" value="parar"> 
-    </div>
-
-    <div class="text-center">
-        <audio controls id="audio">
-
-            <!--<link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
-            <!--<source src="audio_files/fala_watson.ogg" type="audio/ogg">-->
--->
-            <source src= {{ url_for('static', filename='fala_watson.ogg') }} type="audio/ogg">
-        </audio>
+    <div class="container">
+        <div>
+            <h1 class="text-success text-center m-5">Brincando de telefone sem fio com o IBM Watson</h1>
+        </div>
+        <div>
+            <p class="m-5 text-center">Telefone sem fio (também chamado "telefone estragado" em Portugal) é uma tradicional 
+                brincadeira popular, na qual uma pessoa fala uma palavra ou frase (o "segredo") 
+                ao ouvido de outra pessoa ao seu lado, de modo que os demais participantes não 
+                escutem ou descubram imediatamente qual é o "segredo". 
+                Quem ouviu o segredo tenta então repeti-lo para o próximo participante, e 
+                assim por diante até chegar ao último, que deve contar o segredo em voz alta. 
+                Uma das regras do jogo é que o segredo não pode ser repetido ao ouvinte da vez. 
+                Por esse motivo é comum o segredo ser mal entendido e por isso passado ao demais 
+                ouvintes de forma cada vez mais deturpada, chegando totalmente diferente ao ouvinte final, 
+                e isso é o que torna a brincadeira divertida.
+            </p>
+        </div>
+        <div align="center" style="width: 400px">
+            <span style="width: 40%; float: left; text-align: left;">
+                <img src="/static/wireleft.png">
+            </span>
+            <span style="width: 20%; padding: 0px 15px 0px 15px; float: left;">
+                <input type="button" class="btn btn-success" id="record" value="segure e fale">
+            </span>
+            <span style="width: 40%; float: left; text-align: right;">
+                <img src="/static/wireright.png">
+            </span>
+        </div>
+        <br>
+        <div>
+            <p class="m-5 text-center">Costuma-se também fazer referência a essa brincadeira em qualquer situação que 
+                possa haver falhas de comunicação num ambiente que 
+                depende de um passar a informação para o outro sucessivamente até 
+                chegar num destino. Pode-se fazer crítica a alguma 
+                hierarquia numa empresa, por exemplo, dizendo que a 
+                ordem do chefe passou como um "telefone sem fio" até chegar ao 
+                último empregado que a executou de forma totalmente diferente.
+            </p>
+        </div>
+        <div>
+            <p class="m-5 text-center"> Fonte:
+                <a class="text-center" href="https://pt.wikipedia.org/wiki/Telefone_sem_fio_(brincadeira)">
+                    https://pt.wikipedia.org/wiki/Telefone_sem_fio_(brincadeira)</a>
+            </p>
+        </div>
+        <div class="text-center">
+            <audio controls id="audio">
+                <source src="" type="audio/ogg">
+            </audio>
+        </div>
+        <div>
+            <p class="m-5 text-center">Nossa finalidade aqui é apenas mostrar as capacidades do Watson!</p>
+        </div>
     </div>
     
 
@@ -68,32 +77,29 @@
     .then(function(stream) {
 
         var mediaRecorder = new MediaRecorder(stream);
-
-        let record = document.getElementById("record");
-        let stop = document.getElementById("stop");
-
-        record.onclick = function() {
+        var press = document.getElementById("record");
+        
+        press.addEventListener('mousedown', function(){
+            this.classList.replace("btn-success", "btn-danger");
             mediaRecorder.start();
-            console.log(mediaRecorder.state);
-            console.log("recorder started");
-            record.style.background = "red";
-            record.style.color = "black";
-        }
-
-        stop.onclick = function() {
+        });
+        press.addEventListener('touchstart', function(){
+            this.classList.replace("btn-success", "btn-danger");
+            mediaRecorder.start();
+        });
+        press.addEventListener('mouseup', function(){
+            this.classList.replace("btn-danger", "btn-success");
             mediaRecorder.stop();
-            console.log(mediaRecorder.state);
-            console.log("recorder stopped");
-            record.style.background = "";
-            record.style.color = "";
-        }
+        });
+        press.addEventListener('touchend', function(){
+            this.classList.replace("btn-danger", "btn-success");
+            mediaRecorder.stop();
+        });
 
         mediaRecorder.onstop = function(e) 
         {
             console.log("data available after MediaRecorder.stop() called.");
 
-            
-            
             audio.controls = true;
             var blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
             chunks = [];
@@ -112,14 +118,10 @@
                 redirect: 'follow', // manual, *follow, error
                 referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
                 body: blob
-            }).then(resp => {
-
-                //console.log(resp);
-                //console.log(resp.body);
-               
+            })
+            .then(resp => {
                 return resp.blob();
             })
-
             .then(function(blob) {
                     const objectURL = URL.createObjectURL(blob);
                     let audio = document.getElementById("audio");
@@ -127,15 +129,12 @@
                     audio.play();
             })
             .catch(resp => console.log("catch pegou esse erro: " +resp));
-
-
         }
 
         mediaRecorder.ondataavailable = function(e) {
             chunks.push(e.data);
         }
-    })
-    .catch(function(err) {
+    }).catch(function(err) {
         console.log('The following error occurred: ' + err);
     })
     }
