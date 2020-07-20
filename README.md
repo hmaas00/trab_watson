@@ -10,9 +10,16 @@ Se ainda não possui o Flask instalado:
 
 > `pip install Flask`
 
+Também são necessárias as seguintes bibliotecas do Watson
+
+>`pip install ibm-watson`
+>`pip install ibm-cloud-sdk-core`
+
 Clone o repositório, abra um console python, vá até a pasta da aplicação e dê o comando:
 
 > `python app.py`
+
+O aplicativo foi testado no `Firefox`
 
 # Instruções
 
